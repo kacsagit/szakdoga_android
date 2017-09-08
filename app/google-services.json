@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1018729023982",
+    "firebase_url": "https://szakdoga-49405.firebaseio.com",
+    "project_id": "szakdoga-49405",
+    "storage_bucket": "szakdoga-49405.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1018729023982:android:4e16ddbefcfb3078",
+        "android_client_info": {
+          "package_name": "com.example.kata.szakdoga"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1018729023982-56eegjnvn77et4euhunqqpd207h0kql1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.kata.szakdoga",
+            "certificate_hash": "eb579f1bd89b164647e549b80a0be05aea72c664"
+          }
+        },
+        {
+          "client_id": "1018729023982-fgj9elm4arv2eo48jn70stugm101vi91.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkA5U8ORa-XjKRUTLebsCz6YHcQda11ns"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1018729023982-fgj9elm4arv2eo48jn70stugm101vi91.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
