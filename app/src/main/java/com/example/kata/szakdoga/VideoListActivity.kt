@@ -6,6 +6,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.StaggeredGridLayoutManager
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -14,14 +16,18 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.activity_video_list.*
 import java.io.File
+import java.util.*
 
 
 class VideoListActivity : AppCompatActivity() {
+
 
     companion object {
         var REQUEST_TAKE_GALLERY_VIDEO = 1
         var TAG = "VideoListActivity"
     }
+    private var mAdapter: RecyclerView.Adapter<*>? = null
+    private var mLayoutManager: RecyclerView.LayoutManager? = null
 
     lateinit var mAuth: FirebaseAuth
 
@@ -43,24 +49,31 @@ class VideoListActivity : AppCompatActivity() {
             intent.action = Intent.ACTION_GET_CONTENT
             startActivityForResult(Intent.createChooser(intent, "Select Video"), REQUEST_TAKE_GALLERY_VIDEO)
         }
-        watch_b.setOnClickListener {
-            val intent = Intent(this, VideoActivity::class.java)
-            startActivity(intent)
-        }
+
+
+        // Define a layout for RecyclerView
+        mLayoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        recycler_view?.layoutManager = mLayoutManager
+
+
 
         user = mAuth.currentUser
-
         database = FirebaseDatabase.getInstance()
         myRef = database.getReference("videos")
         // Read from the database
+        var items = ArrayList<Videos>()
+
         myRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 for (child in dataSnapshot.children) {
                     val value = child.getValue(Videos::class.java)
+                    items.add(value!!)
                     Log.d(TAG, "Value is: " + value!!)
                 }
+                mAdapter = ColorAdapter(this@VideoListActivity, items)
+                recycler_view?.adapter = mAdapter
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -68,9 +81,12 @@ class VideoListActivity : AppCompatActivity() {
                 Log.w(TAG, "Failed to read value.", error.toException())
             }
         })
-
-
+        mAdapter = ColorAdapter(this, items)
+        recycler_view?.adapter = mAdapter
     }
+
+
+
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         if (resultCode == Activity.RESULT_OK) {
@@ -110,6 +126,7 @@ class VideoListActivity : AppCompatActivity() {
 
                 })
     }
+
 
 
     private fun getPath(uri: Uri): String? {
