@@ -26,8 +26,8 @@ class MainActivity : AppCompatActivity() {
         ok_b.setOnClickListener {
             signInWithEmailAndPassword(email_et.text.toString(), password_et.text.toString())
         }
-        sign_up_b.setOnClickListener{
-            val intent= Intent(this,SignUpActivity::class.java)
+        sign_up_b.setOnClickListener {
+            val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
         }
     }
@@ -41,15 +41,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateUI(currentUser: FirebaseUser?) {
         val user = mAuth.currentUser
-        var emailVerified=false
-        user.let{
-            emailVerified= user!!.isEmailVerified
+        var emailVerified = false
+        user?.let{
+            emailVerified = it.isEmailVerified
         }
         if (currentUser != null && emailVerified) {
             Toast.makeText(this, "logd in", Toast.LENGTH_LONG).show()
-            val intent=Intent(this,VideoListActivity::class.java)
+            val intent = Intent(this, VideoListActivity::class.java)
             startActivity(intent)
-        }else{
+        } else {
             Toast.makeText(this, "not successfull", Toast.LENGTH_LONG).show()
         }
 

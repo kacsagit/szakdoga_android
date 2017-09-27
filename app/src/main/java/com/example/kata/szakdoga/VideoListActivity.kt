@@ -2,8 +2,11 @@ package com.example.kata.szakdoga
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
+import android.media.ThumbnailUtils
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
@@ -16,6 +19,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.activity_video_list.*
 import java.io.File
+import java.io.FileOutputStream
 import java.util.*
 
 
@@ -26,6 +30,7 @@ class VideoListActivity : AppCompatActivity() {
         var REQUEST_TAKE_GALLERY_VIDEO = 1
         var TAG = "VideoListActivity"
     }
+
     private var mAdapter: RecyclerView.Adapter<*>? = null
     private var mLayoutManager: RecyclerView.LayoutManager? = null
 
@@ -67,6 +72,7 @@ class VideoListActivity : AppCompatActivity() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
+                items = ArrayList<Videos>()
                 for (child in dataSnapshot.children) {
                     val value = child.getValue(Videos::class.java)
                     items.add(value!!)
@@ -84,8 +90,6 @@ class VideoListActivity : AppCompatActivity() {
         mAdapter = ColorAdapter(this, items)
         recycler_view?.adapter = mAdapter
     }
-
-
 
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
@@ -106,17 +110,33 @@ class VideoListActivity : AppCompatActivity() {
     private fun uploadFile(selectedImagePath: String) {
         val file = Uri.fromFile(File(selectedImagePath))
 
-        val riversRef = mStorageRef.child("images/" + user!!.uid + "/" + File(selectedImagePath).name)
+        val name = UUID.randomUUID().toString()
 
+        val imageRef = mStorageRef.child("images/" + user!!.uid + "/" + name + "image")
+        val riversRef = mStorageRef.child("images/" + user!!.uid + "/" + name)
 
-        riversRef.putFile(file)
-                .addOnSuccessListener({ taskSnapshot ->
+        val bMap = ThumbnailUtils.createVideoThumbnail(file.path, MediaStore.Video.Thumbnails.MINI_KIND)
+
+        imageRef.putFile(saveImage(bMap, name))
+                .addOnSuccessListener({ imageSnapshot ->
                     // Get a URL to the uploaded content
-                    val downloadUrl = taskSnapshot.downloadUrl
-                    var video = Videos(downloadUrl.toString(), user!!.uid, true)
-                    val newRef = myRef.push()
-                    newRef.setValue(video)
-                    Log.d(TAG, downloadUrl.toString())
+                    riversRef.putFile(file)
+                            .addOnSuccessListener({ taskSnapshot ->
+                                // Get a URL to the uploaded content
+                                val downloadUrl = taskSnapshot.downloadUrl
+                                val imagedUrl = imageSnapshot.downloadUrl
+                                var video = Videos(downloadUrl.toString(), imagedUrl.toString(), user!!.uid, true)
+                                val newRef = myRef.push()
+                                newRef.setValue(video)
+                                Log.d(TAG, downloadUrl.toString())
+                            })
+                            .addOnFailureListener({ e ->
+                                Log.d(TAG, "failed")
+                                e.printStackTrace()
+                                // Handle unsuccessful uploads
+                                // ...
+
+                            })
                 })
                 .addOnFailureListener({ e ->
                     Log.d(TAG, "failed")
@@ -125,8 +145,24 @@ class VideoListActivity : AppCompatActivity() {
                     // ...
 
                 })
+
     }
 
+    private fun saveImage(finalBitmap: Bitmap, filename: String): Uri {
+
+        val root = Environment.getExternalStorageDirectory().absolutePath
+        val myDir = File(root + "/saved_images")
+        myDir.mkdirs()
+
+        val file = File(myDir, filename)
+        if (file.exists()) file.delete()
+
+        FileOutputStream(file).use {
+            finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, it)
+            it.flush()
+        }
+        return Uri.fromFile(file)
+    }
 
 
     private fun getPath(uri: Uri): String? {

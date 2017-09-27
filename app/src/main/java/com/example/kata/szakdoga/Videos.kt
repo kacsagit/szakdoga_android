@@ -5,6 +5,7 @@ package com.example.kata.szakdoga
  */
 class Videos (
         var link: String = "",
+        var tumbnail: String="",
         var user: String = "",
         var public: Boolean=false
 )
