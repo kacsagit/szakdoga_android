@@ -60,7 +60,13 @@ class VideoListActivity : AppCompatActivity() {
         mLayoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         recycler_view?.layoutManager = mLayoutManager
 
-
+        stream.setOnClickListener {
+            //TODO: userid and roomname
+            val intent = Intent(this, StreamVideoActivity::class.java)
+            intent.putExtra(Constants.ROOM_NAME,"id")
+            intent.putExtra(Constants.USER_NAME,"usergfrfgd")
+            startActivity(intent)
+        }
 
         user = mAuth.currentUser
         database = FirebaseDatabase.getInstance()
