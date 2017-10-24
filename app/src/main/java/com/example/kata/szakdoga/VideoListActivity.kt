@@ -82,7 +82,7 @@ class VideoListActivity : AppCompatActivity() {
                 for (child in dataSnapshot.children) {
                     val value = child.getValue(Videos::class.java)
                     items.add(value!!)
-                    Log.d(TAG, "Value is: " + value!!)
+                    Log.d(TAG, "Value is: " + value)
                 }
                 mAdapter = ColorAdapter(this@VideoListActivity, items)
                 recycler_view?.adapter = mAdapter

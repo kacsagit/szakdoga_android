@@ -18,25 +18,23 @@
         android:textColor="#FFFFFF"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/Button"
-        android:layout_toEndOf="@+id/Button" />
+        android:layout_alignTop="@+id/hangup_button"
+        android:layout_toEndOf="@+id/switch_button" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:text="End"
-        android:onClick="hangup"
-        android:id="@+id/imageButton2" />
+        android:id="@+id/hangup_button" />
 
     <Button
-        android:id="@+id/Button"
+        android:id="@+id/switch_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="-"
-        android:onClick="switchs"
-        android:layout_alignTop="@+id/imageButton2"
-        android:layout_toEndOf="@+id/imageButton2"
+        android:layout_alignTop="@+id/hangup_button"
+        android:layout_toEndOf="@+id/hangup_button"
         />
 
 </RelativeLayout>

@@ -33,8 +33,8 @@ class SignUpActivity : AppCompatActivity() {
                         Log.d(TAG, "createUserWithEmail:success")
                         val user = mAuth.currentUser
                         user?.sendEmailVerification()
-                                ?.addOnCompleteListener { task ->
-                                    if (task.isSuccessful) {
+                                ?.addOnCompleteListener { task1 ->
+                                    if (task1.isSuccessful) {
                                         Log.d(TAG, "Conformation email sent.")
                                     }
                                 }
