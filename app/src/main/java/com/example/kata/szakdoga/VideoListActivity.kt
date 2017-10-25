@@ -53,6 +53,8 @@ class VideoListActivity : AppCompatActivity() {
             intent.type = "video/*"
             intent.action = Intent.ACTION_GET_CONTENT
             startActivityForResult(Intent.createChooser(intent, "Select Video"), REQUEST_TAKE_GALLERY_VIDEO)
+
+
         }
 
 
@@ -63,8 +65,8 @@ class VideoListActivity : AppCompatActivity() {
         stream.setOnClickListener {
             //TODO: userid and roomname
             val intent = Intent(this, StreamVideoActivity::class.java)
-            intent.putExtra(Constants.ROOM_NAME,"id")
-            intent.putExtra(Constants.USER_NAME,"usergfrfgd")
+            intent.putExtra(Constants.ROOM_NAME, "id")
+            intent.putExtra(Constants.USER_NAME, "usergfrfgd")
             startActivity(intent)
         }
 
@@ -84,7 +86,7 @@ class VideoListActivity : AppCompatActivity() {
                     items.add(value!!)
                     Log.d(TAG, "Value is: " + value)
                 }
-                mAdapter = ColorAdapter(this@VideoListActivity, items)
+                mAdapter = VideoListAdapter(this@VideoListActivity, items)
                 recycler_view?.adapter = mAdapter
             }
 
@@ -93,7 +95,7 @@ class VideoListActivity : AppCompatActivity() {
                 Log.w(TAG, "Failed to read value.", error.toException())
             }
         })
-        mAdapter = ColorAdapter(this, items)
+        mAdapter = VideoListAdapter(this, items)
         recycler_view?.adapter = mAdapter
     }
 
@@ -112,6 +114,7 @@ class VideoListActivity : AppCompatActivity() {
             }
         }
     }
+
 
     private fun uploadFile(selectedImagePath: String) {
         val file = Uri.fromFile(File(selectedImagePath))
@@ -184,4 +187,6 @@ class VideoListActivity : AppCompatActivity() {
         } else
             null
     }
+
+
 }
