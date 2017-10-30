@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import com.example.kata.szakdoga.videoplayer.PlayerActivity
 import com.squareup.picasso.Picasso
 import java.util.*
 
@@ -24,7 +25,6 @@ class VideoListAdapter(activity: Activity, dataset: ArrayList<Videos>) : Recycle
     private var mDataSet: ArrayList<Videos> = dataset
     private var mContext: Context = activity
     private var act: Activity = activity
-    private val mRandom = Random()
 
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
@@ -57,9 +57,13 @@ class VideoListAdapter(activity: Activity, dataset: ArrayList<Videos>) : Recycle
     }
 
 
-    protected fun getRandomIntInRange(max: Int, min: Int): Int {
-        return mRandom.nextInt(max - min + min) + min
+    public fun update(itemsrec: List<Videos>) {
+        mDataSet.clear()
+        mDataSet.addAll(itemsrec)
+        notifyDataSetChanged()
+
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(mContext).inflate(R.layout.custom_view, parent, false)
@@ -86,4 +90,7 @@ class VideoListAdapter(activity: Activity, dataset: ArrayList<Videos>) : Recycle
         }
 
     }
+
+
+
 }

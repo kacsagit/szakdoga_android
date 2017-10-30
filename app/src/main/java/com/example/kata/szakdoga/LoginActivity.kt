@@ -7,20 +7,20 @@ import android.util.Log
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_login.*
 
 
-class MainActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity() {
 
 
     companion object {
-        var TAG = "MainActivity"
+        var TAG = "LoginActivity"
     }
 
     lateinit var mAuth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_login)
         mAuth = FirebaseAuth.getInstance()
 
         ok_b.setOnClickListener {
@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
         }
         if (currentUser != null && emailVerified) {
             Toast.makeText(this, "logd in", Toast.LENGTH_LONG).show()
-            val intent = Intent(this, VideoListActivity::class.java)
+            val intent = Intent(this, IconTabsActivity::class.java)
             startActivity(intent)
         } else {
             Toast.makeText(this, "not successfull", Toast.LENGTH_LONG).show()
@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "signInWithEmail:failure", task.exception)
-                        Toast.makeText(this@MainActivity, "Authentication failed.",
+                        Toast.makeText(this@LoginActivity, "Authentication failed.",
                                 Toast.LENGTH_SHORT).show()
                         updateUI(null)
                     }

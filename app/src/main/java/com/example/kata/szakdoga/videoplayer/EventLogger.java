@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.kata.szakdoga;
+package com.example.kata.szakdoga.videoplayer;
 
 import android.os.SystemClock;
 import android.util.Log;
@@ -57,7 +57,7 @@ import java.util.Locale;
 /**
  * Logs player events using {@link Log}.
  */
-/* package */ final class EventLogger implements Player.EventListener, AudioRendererEventListener,
+/* package */ public final class EventLogger implements Player.EventListener, AudioRendererEventListener,
         VideoRendererEventListener, AdaptiveMediaSourceEventListener,
     ExtractorMediaSource.EventListener, DefaultDrmSessionManager.EventListener,
     MetadataRenderer.Output {

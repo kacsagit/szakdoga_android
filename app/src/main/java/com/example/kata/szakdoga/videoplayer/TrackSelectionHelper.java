@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.kata.szakdoga;
+package com.example.kata.szakdoga.videoplayer;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -27,6 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
 
+import com.example.kata.szakdoga.R;
 import com.google.android.exoplayer2.RendererCapabilities;
 import com.google.android.exoplayer2.source.TrackGroup;
 import com.google.android.exoplayer2.source.TrackGroupArray;
@@ -42,7 +43,7 @@ import java.util.Arrays;
 /**
  * Helper class for displaying track selection dialogs.
  */
-/* package */ final class TrackSelectionHelper implements View.OnClickListener,
+/* package */ public final class TrackSelectionHelper implements View.OnClickListener,
     DialogInterface.OnClickListener {
 
   private static final TrackSelection.Factory FIXED_FACTORY = new FixedTrackSelection.Factory();
@@ -272,6 +273,7 @@ import java.util.Arrays;
 
   private static int[] getTracksAdding(SelectionOverride override, int addedTrack) {
     int[] tracks = override.tracks;
+    tracks = Arrays.copyOf(tracks, tracks.length + 1);
     tracks = Arrays.copyOf(tracks, tracks.length + 1);
     tracks[tracks.length - 1] = addedTrack;
     return tracks;

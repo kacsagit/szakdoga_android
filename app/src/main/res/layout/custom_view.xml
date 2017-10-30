@@ -1,22 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    card_view:cardCornerRadius="4dp"
-    card_view:cardMaxElevation="2dp"
-    card_view:cardElevation="1dp"
     android:layout_margin="5dp"
-    >
-    <ImageView
-        android:id="@+id/image"
+    card_view:cardCornerRadius="4dp"
+    card_view:cardElevation="1dp"
+    card_view:cardMaxElevation="2dp">
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:scaleType="centerCrop"
-        android:gravity="center"
-        android:transitionName="simple_activity_transition"
-        />
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="#000000"
+            android:gravity="center"
+            android:alpha=".85"
+            android:scaleType="centerCrop"
+            android:transitionName="simple_activity_transition" />
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:scaleType="fitCenter"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:src="@drawable/exo_controls_play"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:layout_gravity="bottom"
+            android:background="#80FFFFFF">
+            <TextView
+                android:id="@+id/uploader_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="f@use.com"
+                android:textColor="#80FAAA"/>
+        </LinearLayout>
+    </FrameLayout>
 </android.support.v7.widget.CardView>

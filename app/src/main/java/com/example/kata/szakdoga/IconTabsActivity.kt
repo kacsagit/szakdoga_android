@@ -8,109 +8,142 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
+import android.support.v4.app.FragmentPagerAdapter
+import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.StaggeredGridLayoutManager
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.*
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import kotlinx.android.synthetic.main.activity_video_list.*
+import kotlinx.android.synthetic.main.activity_icon_tabs.*
+import kotlinx.android.synthetic.main.activity_icon_tabs.view.*
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
 
-
-class VideoListActivity : AppCompatActivity() {
-
-
+class IconTabsActivity : AppCompatActivity() {
     companion object {
         var REQUEST_TAKE_GALLERY_VIDEO = 1
-        var TAG = "VideoListActivity"
     }
-
-    private var mAdapter: RecyclerView.Adapter<*>? = null
-    private var mLayoutManager: RecyclerView.LayoutManager? = null
-
-    lateinit var mAuth: FirebaseAuth
 
     lateinit var mStorageRef: StorageReference
 
+    lateinit var mAuth: FirebaseAuth
     val link = ""
     lateinit var myRef: DatabaseReference
     var user: FirebaseUser? = null
-    lateinit var database: FirebaseDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_video_list)
+        setContentView(R.layout.activity_icon_tabs)
         mStorageRef = FirebaseStorage.getInstance().reference
         mAuth = FirebaseAuth.getInstance()
-        upload_b.setOnClickListener {
+        user = mAuth.currentUser
+        var database = FirebaseDatabase.getInstance()
+        myRef = database.getReference("videos")
+
+        setSupportActionBar(toolbar)
+        toolbar.add_button.setOnClickListener {
             val intent = Intent()
             intent.type = "video/*"
             intent.action = Intent.ACTION_GET_CONTENT
             startActivityForResult(Intent.createChooser(intent, "Select Video"), REQUEST_TAKE_GALLERY_VIDEO)
-
-
         }
 
 
-        // Define a layout for RecyclerView
-        mLayoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        recycler_view?.layoutManager = mLayoutManager
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        stream.setOnClickListener {
-            //TODO: userid and roomname
-            val intent = Intent(this, StreamVideoActivity::class.java)
-            intent.putExtra(Constants.ROOM_NAME, "id")
-            intent.putExtra(Constants.USER_NAME, "usergfrfgd")
-            startActivity(intent)
-        }
+        setupViewPager(viewpager)
 
-        user = mAuth.currentUser
-        database = FirebaseDatabase.getInstance()
-        myRef = database.getReference("videos")
-        // Read from the database
-        var items = ArrayList<Videos>()
+        tabs.setupWithViewPager(viewpager)
 
-        myRef.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                items = ArrayList<Videos>()
-                for (child in dataSnapshot.children) {
-                    val value = child.getValue(Videos::class.java)
-                    items.add(value!!)
-                    Log.d(TAG, "Value is: " + value)
-                }
-                mAdapter = VideoListAdapter(this@VideoListActivity, items)
-                recycler_view?.adapter = mAdapter
-            }
+        setupTabIcons()
+    }
 
-            override fun onCancelled(error: DatabaseError) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException())
-            }
-        })
-        mAdapter = VideoListAdapter(this, items)
-        recycler_view?.adapter = mAdapter
+    private fun setupTabIcons() {
+        val tabIcons = intArrayOf(R.drawable.icons8_home, R.drawable.ic_tab_call, R.drawable.ic_tab_contacts)
+
+        tabs.getTabAt(0)?.setIcon(tabIcons[0])
+        tabs.getTabAt(1)?.setIcon(tabIcons[1])
+        tabs.getTabAt(2)?.setIcon(tabIcons[2])
+    }
+
+    private fun setupViewPager(viewPager: ViewPager?) {
+        val adapter = ViewPagerAdapter(supportFragmentManager)
+        adapter.addFrag(VideoListFragment(), "ONE")
+        adapter.addFrag(TwoFragment(), "TWO")
+        adapter.addFrag(ThreeFragment(), "THREE")
+        viewPager?.adapter = adapter
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_list, menu)
+        return super.onCreateOptionsMenu(menu)
     }
 
 
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        val id = item!!.itemId
+        when (id) {
+            R.id.action_record -> {
+                //TODO: userid and roomname
+                val intent = Intent(this, StreamVideoActivity::class.java)
+                intent.putExtra(Constants.ROOM_NAME, "id")
+                intent.putExtra(Constants.USER_NAME, "usergfrfgd")
+                startActivity(intent)
+                return true
+            }
+        }
+
+        return false
+    }
+
+
+    internal inner class ViewPagerAdapter(manager: FragmentManager) : FragmentPagerAdapter(manager) {
+        private val mFragmentList = ArrayList<Fragment>()
+        private val mFragmentTitleList = ArrayList<String>()
+
+        override fun getItem(position: Int): Fragment {
+            return mFragmentList[position]
+        }
+
+        override fun getCount(): Int {
+            return mFragmentList.size
+        }
+
+        fun addFrag(fragment: Fragment, title: String) {
+            mFragmentList.add(fragment)
+            mFragmentTitleList.add(title)
+        }
+
+        override fun getPageTitle(position: Int): CharSequence? {
+
+            // return null to display only the icon
+            return null
+        }
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == REQUEST_TAKE_GALLERY_VIDEO) {
-                val selectedImageUri = data.data
+                data?.let {
+                    val selectedImageUri = data.data
+                    // MEDIA GALLERY
+                    val selectedImagePath = getPath(selectedImageUri)
+                    if (selectedImagePath != null) {
+                        uploadFile(selectedImagePath)
 
-                // MEDIA GALLERY
-                val selectedImagePath = getPath(selectedImageUri)
-                if (selectedImagePath != null) {
-                    uploadFile(selectedImagePath)
-
+                    }
                 }
+
             }
         }
     }
@@ -137,10 +170,10 @@ class VideoListActivity : AppCompatActivity() {
                                 var video = Videos(downloadUrl.toString(), imagedUrl.toString(), user!!.uid, true)
                                 val newRef = myRef.push()
                                 newRef.setValue(video)
-                                Log.d(TAG, downloadUrl.toString())
+                                Log.d(VideoListFragment.TAG, downloadUrl.toString())
                             })
                             .addOnFailureListener({ e ->
-                                Log.d(TAG, "failed")
+                                Log.d(VideoListFragment.TAG, "failed")
                                 e.printStackTrace()
                                 // Handle unsuccessful uploads
                                 // ...
@@ -148,7 +181,7 @@ class VideoListActivity : AppCompatActivity() {
                             })
                 })
                 .addOnFailureListener({ e ->
-                    Log.d(TAG, "failed")
+                    Log.d(VideoListFragment.TAG, "failed")
                     e.printStackTrace()
                     // Handle unsuccessful uploads
                     // ...
@@ -187,6 +220,4 @@ class VideoListActivity : AppCompatActivity() {
         } else
             null
     }
-
-
 }
