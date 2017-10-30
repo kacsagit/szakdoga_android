@@ -1,10 +1,11 @@
-package com.example.kata.szakdoga
+package com.example.kata.szakdoga.UI
 
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.widget.Toast
+import com.example.kata.szakdoga.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_login.*
@@ -45,6 +46,8 @@ class LoginActivity : AppCompatActivity() {
         user?.let{
             emailVerified = it.isEmailVerified
         }
+        //todo email verifacian delete
+        emailVerified = true
         if (currentUser != null && emailVerified) {
             Toast.makeText(this, "logd in", Toast.LENGTH_LONG).show()
             val intent = Intent(this, IconTabsActivity::class.java)

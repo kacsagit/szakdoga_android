@@ -1,4 +1,4 @@
-package com.example.kata.szakdoga
+package com.example.kata.szakdoga.service
 
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -9,6 +9,9 @@ import android.graphics.Color
 import android.media.RingtoneManager
 import android.support.v4.app.NotificationCompat
 import android.util.Log
+import com.example.kata.szakdoga.Constants
+import com.example.kata.szakdoga.R
+import com.example.kata.szakdoga.UI.WatchVideoActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 

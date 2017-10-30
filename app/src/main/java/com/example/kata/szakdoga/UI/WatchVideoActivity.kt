@@ -15,7 +15,7 @@
  *
  */
 
-package com.example.kata.szakdoga
+package com.example.kata.szakdoga.UI
 
 import android.app.Activity
 import android.content.Context
@@ -30,6 +30,8 @@ import com.example.kata.nubomedia.kurentoroomclientandroid.*
 import com.example.kata.nubomedia.webrtcpeerandroid.NBMMediaConfiguration
 import com.example.kata.nubomedia.webrtcpeerandroid.NBMPeerConnection
 import com.example.kata.nubomedia.webrtcpeerandroid.NBMWebRTCPeer
+import com.example.kata.szakdoga.Constants
+import com.example.kata.szakdoga.R
 import fi.vtt.nubomedia.utilitiesandroid.LooperExecutor
 import kotlinx.android.synthetic.main.activity_video_watch.*
 import org.webrtc.*

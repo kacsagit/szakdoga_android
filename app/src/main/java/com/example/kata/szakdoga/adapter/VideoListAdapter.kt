@@ -1,4 +1,4 @@
-package com.example.kata.szakdoga
+package com.example.kata.szakdoga.adapter
 
 import android.app.Activity
 import android.content.Context
@@ -11,6 +11,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
+import com.example.kata.szakdoga.R
+import com.example.kata.szakdoga.data.Videos
 import com.example.kata.szakdoga.videoplayer.PlayerActivity
 import com.squareup.picasso.Picasso
 import java.util.*
@@ -18,13 +21,14 @@ import java.util.*
 
 
 
+
+
 /**
  * Created by Kata on 2017. 09. 08..
  */
-class VideoListAdapter(activity: Activity, dataset: ArrayList<Videos>) : RecyclerView.Adapter<VideoListAdapter.ViewHolder>() {
+class VideoListAdapter( dataset: ArrayList<Videos>) : RecyclerView.Adapter<VideoListAdapter.ViewHolder>() {
     private var mDataSet: ArrayList<Videos> = dataset
-    private var mContext: Context = activity
-    private var act: Activity = activity
+    private lateinit var mContext: Context
 
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
@@ -32,15 +36,17 @@ class VideoListAdapter(activity: Activity, dataset: ArrayList<Videos>) : Recycle
         // Set a random height for TextView
     //    holder?.image?.layoutParams?.height = getRandomIntInRange(500, 450);
         // Set a random color for TextView background
+
+        holder?.user?.text=mDataSet[position].user
         holder?.itemView?.setOnClickListener {
             var preferExtensionDecoders = false
             var uri = mDataSet[position].link
             var extension = ""
             var adTagUri = null
-            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(act,
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation( mContext as Activity,
                     holder.image,
                     ViewCompat.getTransitionName(holder.image))
-            var sample = UriSample( preferExtensionDecoders, uri, extension, adTagUri)
+            var sample = UriSample(preferExtensionDecoders, uri, extension, adTagUri)
             mContext.startActivity(sample.buildIntent(mContext),options.toBundle())
 
 
@@ -65,13 +71,15 @@ class VideoListAdapter(activity: Activity, dataset: ArrayList<Videos>) : Recycle
     }
 
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
-        val v = LayoutInflater.from(mContext).inflate(R.layout.custom_view, parent, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val v = LayoutInflater.from(parent.context).inflate(R.layout.video_view, parent, false)
+        mContext=parent.context
         return ViewHolder(v)
     }
 
     class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
         var image: ImageView = v.findViewById(R.id.image)
+        var user: TextView= v.findViewById(R.id.uploader_text)
 
     }
 

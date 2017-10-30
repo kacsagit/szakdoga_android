@@ -1,4 +1,4 @@
-package com.example.kata.szakdoga
+package com.example.kata.szakdoga.data
 
 /**
  * Created by Kata on 2017. 09. 08..

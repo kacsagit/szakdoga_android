@@ -34,18 +34,18 @@
 
 
         <activity
-            android:name=".IconTabsActivity"
+            android:name=".UI.IconTabsActivity"
              >
         </activity>
         <activity
-            android:name=".StreamVideoActivity"
+            android:name=".UI.StreamVideoActivity"
             android:screenOrientation="portrait"
-            android:parentActivityName=".IconTabsActivity"
+            android:parentActivityName=".UI.IconTabsActivity"
             android:windowSoftInputMode="stateHidden"
             android:theme="@style/AppTheme.NoActionBar" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".IconTabsActivity" />
+                android:value=".UI.IconTabsActivity" />
         </activity>
 
         <activity android:name=".videoplayer.PlayerActivity"
@@ -68,27 +68,27 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".WatchVideoActivity"
+            android:name=".UI.WatchVideoActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
-        <activity android:name=".LoginActivity">
+        <activity android:name=".UI.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SignUpActivity" />
+        <activity android:name=".UI.SignUpActivity" />
         <service
-            android:name=".MyFirebaseInstanceIDService">
+            android:name=".service.MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
         </service>
         <service
-            android:name=".MyFirebaseMessagingService">
+            android:name=".service.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>

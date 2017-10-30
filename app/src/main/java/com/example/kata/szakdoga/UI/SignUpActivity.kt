@@ -1,12 +1,17 @@
-package com.example.kata.szakdoga
+package com.example.kata.szakdoga.UI
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.widget.Toast
+import com.example.kata.szakdoga.R
+import com.example.kata.szakdoga.data.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_sign_up.*
+
+
 
 
 class SignUpActivity : AppCompatActivity() {
@@ -36,6 +41,8 @@ class SignUpActivity : AppCompatActivity() {
                                 ?.addOnCompleteListener { task1 ->
                                     if (task1.isSuccessful) {
                                         Log.d(TAG, "Conformation email sent.")
+                                        val ref = FirebaseDatabase.getInstance().getReference("users")
+                                         ref.child(user.uid).setValue(User(user.email))
                                     }
                                 }
                         updateUI(user)
@@ -53,7 +60,7 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun updateUI(currentUser: FirebaseUser?) {
         if (currentUser != null) {
-            Toast.makeText(this, "sign up successfull", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Sign up successful, confirm e-mail address", Toast.LENGTH_LONG).show()
         }else{
             Toast.makeText(this, "not successfull", Toast.LENGTH_LONG).show()
         }

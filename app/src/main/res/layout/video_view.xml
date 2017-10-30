@@ -37,13 +37,14 @@
             android:layout_height="wrap_content"
             android:gravity="bottom"
             android:layout_gravity="bottom"
-            android:background="#80FFFFFF">
+            android:padding="2dp"
+            android:background="#CCFFFFFF">
             <TextView
                 android:id="@+id/uploader_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="f@use.com"
-                android:textColor="#80FAAA"/>
+                android:textColor="@color/colorPrimary"/>
         </LinearLayout>
     </FrameLayout>
 </android.support.v7.widget.CardView>

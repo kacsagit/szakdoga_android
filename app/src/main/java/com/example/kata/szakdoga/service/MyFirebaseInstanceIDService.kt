@@ -1,4 +1,4 @@
-package com.example.kata.szakdoga
+package com.example.kata.szakdoga.service
 
 import android.content.ContentValues.TAG
 import android.util.Log

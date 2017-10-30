@@ -1,4 +1,4 @@
-package com.example.kata.szakdoga
+package com.example.kata.szakdoga.UI
 
 import android.app.Activity
 import android.content.Intent
@@ -16,6 +16,9 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import com.example.kata.szakdoga.Constants
+import com.example.kata.szakdoga.R
+import com.example.kata.szakdoga.data.Videos
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
@@ -68,7 +71,7 @@ class IconTabsActivity : AppCompatActivity() {
     }
 
     private fun setupTabIcons() {
-        val tabIcons = intArrayOf(R.drawable.icons8_home, R.drawable.ic_tab_call, R.drawable.ic_tab_contacts)
+        val tabIcons = intArrayOf(R.drawable.icons8_home, R.drawable.icons8_people, R.drawable.ic_tab_contacts)
 
         tabs.getTabAt(0)?.setIcon(tabIcons[0])
         tabs.getTabAt(1)?.setIcon(tabIcons[1])
@@ -78,7 +81,7 @@ class IconTabsActivity : AppCompatActivity() {
     private fun setupViewPager(viewPager: ViewPager?) {
         val adapter = ViewPagerAdapter(supportFragmentManager)
         adapter.addFrag(VideoListFragment(), "ONE")
-        adapter.addFrag(TwoFragment(), "TWO")
+        adapter.addFrag(UsersListFragment(), "TWO")
         adapter.addFrag(ThreeFragment(), "THREE")
         viewPager?.adapter = adapter
     }

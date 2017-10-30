@@ -26,6 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_gravity="center|center"
                 android:layout_height="wrap_content"
+                android:textSize="20dp"
                 android:text="VideoShare"/>
         </android.support.v7.widget.Toolbar>
 

@@ -1,4 +1,4 @@
-package com.example.kata.szakdoga
+package com.example.kata.szakdoga.UI
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -8,6 +8,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.kata.szakdoga.R
+import com.example.kata.szakdoga.adapter.VideoListAdapter
+import com.example.kata.szakdoga.data.User
+import com.example.kata.szakdoga.data.Videos
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
@@ -15,6 +19,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.fragment_video_list.view.*
 import java.util.*
+import kotlin.collections.HashMap
 
 
 class VideoListFragment : Fragment() {
@@ -28,12 +33,12 @@ class VideoListFragment : Fragment() {
     lateinit var mAuth: FirebaseAuth
 
     lateinit var mStorageRef: StorageReference
-
+    lateinit var users: HashMap<String, User>
     val link = ""
     lateinit var myRef: DatabaseReference
     var user: FirebaseUser? = null
     lateinit var database: FirebaseDatabase
-
+    var items = ArrayList<Videos>()
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -53,33 +58,67 @@ class VideoListFragment : Fragment() {
         database = FirebaseDatabase.getInstance()
         myRef = database.getReference("videos")
         // Read from the database
-        var items = ArrayList<Videos>()
 
-        mAdapter = VideoListAdapter(activity, items)
+
+        mAdapter = VideoListAdapter(items)
         view.recycler_view?.adapter = mAdapter
 
-        myRef.addValueEventListener(object : ValueEventListener {
+
+
+        users = HashMap<String, User>()
+        updateUser()
+
+        return view
+
+    }
+
+    fun updateUser(){
+        var myUserRef = database.getReference("users")
+        myUserRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                items = ArrayList<Videos>()
+                users = HashMap<String, User>()
                 for (child in dataSnapshot.children) {
-                    val value = child.getValue(Videos::class.java)
-                    items.add(value!!)
+                    val value = child.getValue(User::class.java)
+                    users.put(child.key, value!!)
                     Log.d(TAG, "Value is: " + value)
                 }
-                mAdapter?.update(items)
+                updateVideos()
+
             }
+
 
             override fun onCancelled(error: DatabaseError) {
                 // Failed to read value
                 Log.w(TAG, "Failed to read value.", error.toException())
             }
         })
-
-        return view
     }
 
+    fun updateVideos(){
+        myRef.addValueEventListener(
+                object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        // This method is called once with the initial value and again
+                        // whenever data at this location is updated.
+                        items = ArrayList<Videos>()
+                        for (child in dataSnapshot.children) {
+                            val value = child.getValue(Videos::class.java)
+                            var user = users[value?.user]?.email
+                            user?.let { value?.user = it }
+                            items.add(value!!)
+                            Log.d(TAG, "Value is: " + value)
+                        }
+                        mAdapter?.update(items)
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        // Failed to read value
+                        Log.w(TAG, "Failed to read value.", error.toException())
+                    }
+                })
+    }
 
 
 }
