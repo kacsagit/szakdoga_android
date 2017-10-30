@@ -128,7 +128,7 @@ import java.util.Arrays;
     disableView.setOnClickListener(this);
     root.addView(disableView);
 
-    // View for clearing the override to allow the selector to use its default selection logic.
+    // View for clearing the override to allow the selector to use its default_img selection logic.
     defaultView = (CheckedTextView) inflater.inflate(
         android.R.layout.simple_list_item_single_choice, root, false);
     defaultView.setBackgroundResource(selectableItemBackgroundResourceId);

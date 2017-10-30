@@ -96,6 +96,8 @@ class VideoListFragment : Fragment() {
         })
     }
 
+
+
     fun updateVideos(){
         myRef.addValueEventListener(
                 object : ValueEventListener {

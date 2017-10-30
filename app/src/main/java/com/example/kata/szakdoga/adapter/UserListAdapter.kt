@@ -10,25 +10,66 @@ import android.widget.Button
 import android.widget.TextView
 import com.example.kata.szakdoga.R
 import com.example.kata.szakdoga.data.User
+import com.example.kata.szakdoga.data.UserId
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import java.util.*
+
 
 /**
  * Created by Kata on 2017. 09. 08..
  */
 class UserListAdapter(dataset: ArrayList<User>) : RecyclerView.Adapter<UserListAdapter.ViewHolder>() {
     private var mDataSet: ArrayList<User> = dataset
-
+    private var friends: HashSet<String> = HashSet<String>()
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
+        var currentUser = FirebaseAuth.getInstance().currentUser!!
+        val ref = FirebaseDatabase.getInstance().getReference("friends")
+        holder?.user?.text = mDataSet[position].email
 
-        holder?.user?.text=mDataSet[position].email
-        holder?.followButton?.setOnClickListener{
-            holder.followButton.visibility=GONE
-            holder.unfollowButton.visibility= VISIBLE
+        if (!friends.contains(mDataSet[position].uid)) {
+            holder?.followButton?.visibility = VISIBLE
+            holder?.unfollowButton?.visibility = GONE
+        } else {
+            holder?.followButton?.visibility = GONE
+            holder?.unfollowButton?.visibility = VISIBLE
         }
-        holder?.unfollowButton?.setOnClickListener{
-            holder.followButton.visibility=VISIBLE
-            holder.unfollowButton.visibility= GONE
+
+
+        holder?.followButton?.setOnClickListener {
+            holder.followButton.visibility = GONE
+            holder.unfollowButton.visibility = VISIBLE
+            ref.child(currentUser.uid).child("user").setValue(currentUser.uid)
+            ref.child(currentUser.uid).child("friends").child(mDataSet[position].uid).setValue(UserId(mDataSet[position].uid))
+        }
+        holder?.unfollowButton?.setOnClickListener {
+            holder.followButton.visibility = VISIBLE
+            holder.unfollowButton.visibility = GONE
+            ref.child(currentUser.uid).child(mDataSet[position].uid).setValue(null)
+
+
+            val queryRef = ref.child(currentUser.uid).child("friends")
+
+            queryRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onCancelled(p0: DatabaseError?) {
+
+                }
+
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    for (child in dataSnapshot.children) {
+                        if (child.key == mDataSet[position].uid) {
+                            ref.child(currentUser.uid).child("friends").child(child.key).setValue(null);
+                        }
+                    }
+                }
+
+            })
+
+
         }
     }
 
@@ -58,7 +99,10 @@ class UserListAdapter(dataset: ArrayList<User>) : RecyclerView.Adapter<UserListA
     }
 
 
-
+    fun updateFriend(friendlist: HashSet<String>) {
+        friends = friendlist
+        notifyDataSetChanged()
+    }
 
 
 }

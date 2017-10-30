@@ -9,12 +9,16 @@ import android.support.v4.view.ViewCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import com.example.kata.szakdoga.R
 import com.example.kata.szakdoga.data.Videos
 import com.example.kata.szakdoga.videoplayer.PlayerActivity
+import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import java.util.*
 
@@ -31,11 +35,19 @@ class VideoListAdapter( dataset: ArrayList<Videos>) : RecyclerView.Adapter<Video
     private lateinit var mContext: Context
 
 
+
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        Picasso.with(mContext).load(mDataSet[position].tumbnail).placeholder(R.mipmap.ic_launcher).into(holder?.image)
-        // Set a random height for TextView
-    //    holder?.image?.layoutParams?.height = getRandomIntInRange(500, 450);
-        // Set a random color for TextView background
+        Picasso.with(mContext).load(mDataSet[position].tumbnail).placeholder(R.drawable.default_img).into(holder?.image, object: Callback{
+            override fun onError() {}
+
+            override fun onSuccess() {
+                holder?.progressBar?.visibility=GONE
+                holder?.playImage?.visibility= VISIBLE
+            }
+
+
+        })
+
 
         holder?.user?.text=mDataSet[position].user
         holder?.itemView?.setOnClickListener {
@@ -80,6 +92,8 @@ class VideoListAdapter( dataset: ArrayList<Videos>) : RecyclerView.Adapter<Video
     class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
         var image: ImageView = v.findViewById(R.id.image)
         var user: TextView= v.findViewById(R.id.uploader_text)
+        var playImage: ImageView= v.findViewById(R.id.play_image)
+        var progressBar: ProgressBar=v.findViewById(R.id.progress_bar)
 
     }
 
@@ -98,6 +112,7 @@ class VideoListAdapter( dataset: ArrayList<Videos>) : RecyclerView.Adapter<Video
         }
 
     }
+
 
 
 

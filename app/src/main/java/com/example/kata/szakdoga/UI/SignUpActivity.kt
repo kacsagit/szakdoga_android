@@ -42,7 +42,7 @@ class SignUpActivity : AppCompatActivity() {
                                     if (task1.isSuccessful) {
                                         Log.d(TAG, "Conformation email sent.")
                                         val ref = FirebaseDatabase.getInstance().getReference("users")
-                                         ref.child(user.uid).setValue(User(user.email))
+                                         ref.child(user.uid).setValue(User(user.uid,user.email))
                                     }
                                 }
                         updateUI(user)
