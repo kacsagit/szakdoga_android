@@ -16,6 +16,8 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import com.example.kata.szakdoga.Constants
 import com.example.kata.szakdoga.R
 import com.example.kata.szakdoga.data.Videos
@@ -49,7 +51,7 @@ class IconTabsActivity : AppCompatActivity() {
         mStorageRef = FirebaseStorage.getInstance().reference
         mAuth = FirebaseAuth.getInstance()
         user = mAuth.currentUser
-        var database = FirebaseDatabase.getInstance()
+        val database = FirebaseDatabase.getInstance()
         myRef = database.getReference("videos")
 
         setSupportActionBar(toolbar)
@@ -82,7 +84,7 @@ class IconTabsActivity : AppCompatActivity() {
         val adapter = ViewPagerAdapter(supportFragmentManager)
         adapter.addFrag(VideoListFragment(), "ONE")
         adapter.addFrag(UsersListFragment(), "TWO")
-        adapter.addFrag(ThreeFragment(), "THREE")
+        adapter.addFrag(OwnListFragment(), "THREE")
         viewPager?.adapter = adapter
     }
 
@@ -143,6 +145,7 @@ class IconTabsActivity : AppCompatActivity() {
                     val selectedImagePath = getPath(selectedImageUri)
                     if (selectedImagePath != null) {
                         uploadFile(selectedImagePath)
+                        loading_flayout.visibility=VISIBLE
 
                     }
                 }
@@ -168,14 +171,16 @@ class IconTabsActivity : AppCompatActivity() {
                     riversRef.putFile(file)
                             .addOnSuccessListener({ taskSnapshot ->
                                 // Get a URL to the uploaded content
+                                loading_flayout.visibility=GONE
                                 val downloadUrl = taskSnapshot.downloadUrl
                                 val imagedUrl = imageSnapshot.downloadUrl
-                                var video = Videos(downloadUrl.toString(), imagedUrl.toString(), user!!.uid, true)
+                                val video = Videos(downloadUrl.toString(), imagedUrl.toString(), user!!.uid, true)
                                 val newRef = myRef.push()
                                 newRef.setValue(video)
                                 Log.d(VideoListFragment.TAG, downloadUrl.toString())
                             })
                             .addOnFailureListener({ e ->
+                                loading_flayout.visibility=GONE
                                 Log.d(VideoListFragment.TAG, "failed")
                                 e.printStackTrace()
                                 // Handle unsuccessful uploads

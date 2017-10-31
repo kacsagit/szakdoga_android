@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    card_view:cardCornerRadius="4dp"
+    card_view:cardElevation="1dp"
+    card_view:cardMaxElevation="2dp">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="#FFFFFF"
+            android:gravity="center"
+            android:alpha=".85"
+            android:scaleType="centerCrop"
+            android:transitionName="simple_activity_transition" />
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:indeterminate="true"/>
+
+        <ImageView
+            android:id="@+id/play_image"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:scaleType="fitCenter"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:visibility="gone"
+            android:src="@drawable/exo_controls_play"/>
+
+    </FrameLayout>
+</android.support.v7.widget.CardView>

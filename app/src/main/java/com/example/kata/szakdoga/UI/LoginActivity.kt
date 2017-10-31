@@ -49,12 +49,12 @@ class LoginActivity : AppCompatActivity() {
         //todo email verifacian delete
         emailVerified = true
         if (currentUser != null && emailVerified) {
-            Toast.makeText(this, "logd in", Toast.LENGTH_LONG).show()
+       //     Toast.makeText(this, "logd in", Toast.LENGTH_LONG).show()
             val intent = Intent(this, IconTabsActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             startActivity(intent)
         } else {
-            Toast.makeText(this, "not successfull", Toast.LENGTH_LONG).show()
+         //   Toast.makeText(this, "not successfull", Toast.LENGTH_LONG).show()
         }
 
     }
