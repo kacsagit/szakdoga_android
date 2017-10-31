@@ -72,7 +72,7 @@ class VideoListFragment : Fragment() {
 
     }
 
-    fun updateUser(){
+    fun updateUser() {
         var myUserRef = database.getReference("users")
         myUserRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -84,7 +84,7 @@ class VideoListFragment : Fragment() {
                     users.put(child.key, value!!)
                     Log.d(TAG, "Value is: " + value)
                 }
-                updateVideos()
+                updateFriends()
 
             }
 
@@ -97,8 +97,7 @@ class VideoListFragment : Fragment() {
     }
 
 
-
-    fun updateVideos(){
+    fun updateVideos() {
         myRef.addValueEventListener(
                 object : ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -107,10 +106,12 @@ class VideoListFragment : Fragment() {
                         items = ArrayList<Videos>()
                         for (child in dataSnapshot.children) {
                             val value = child.getValue(Videos::class.java)
-                            var user = users[value?.user]?.email
-                            user?.let { value?.user = it }
-                            items.add(value!!)
-                            Log.d(TAG, "Value is: " + value)
+                            if (friends.contains(value?.user)) {
+                                var user = users[value?.user]?.email
+                                user?.let { value?.user = it }
+                                items.add(value!!)
+                                Log.d(TAG, "Value is: " + value)
+                            }
                         }
                         mAdapter?.update(items)
                     }
@@ -120,6 +121,32 @@ class VideoListFragment : Fragment() {
                         Log.w(TAG, "Failed to read value.", error.toException())
                     }
                 })
+    }
+
+    var friends = HashSet<String>()
+
+    fun updateFriends() {
+
+        var myUserRef = database.getReference("friends").child(user?.uid).child("friends")
+        myUserRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                friends = HashSet<String>()
+                for (child in dataSnapshot.children) {
+                    val value = child.key
+                    friends.add(value.toString())
+                    Log.d(VideoListFragment.TAG, "Value is: " + value)
+                }
+                updateVideos()
+            }
+
+
+            override fun onCancelled(error: DatabaseError) {
+                // Failed to read value
+                Log.w(VideoListFragment.TAG, "Failed to read value.", error.toException())
+            }
+        })
     }
 
 
