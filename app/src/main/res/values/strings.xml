@@ -62,5 +62,15 @@
     <string name="play">Play</string>
     <string name="audio_video_permisson">You need to grant camera and audio permission to use it</string>
     <string name="storage_permisson">You need to grant permisson to storage to upload videos.</string>
+    <string name="stream_title">Live</string>
+    <string name="stream_description">Share your video live</string>
+    <string name="add_title">Upload</string>
+    <string name="add_description">Upload existing videos</string>
+    <string name="home_title">Watch</string>
+    <string name="home_description">Watch videos of others</string>
+    <string name="follow_title">Users</string>
+    <string name="follow_description">Follow users</string>
+    <string name="own_title">Your videos</string>
+    <string name="own_description">Browse your own videos</string>
 
 </resources>

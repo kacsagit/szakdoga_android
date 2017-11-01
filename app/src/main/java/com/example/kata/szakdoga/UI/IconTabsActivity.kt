@@ -8,17 +8,21 @@ import android.media.ThumbnailUtils
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.preference.PreferenceManager
 import android.provider.MediaStore
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.ViewPager
+import android.support.v4.view.animation.FastOutSlowInInterpolator
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.view.ViewGroup
 import com.example.kata.szakdoga.Constants
 import com.example.kata.szakdoga.R
 import com.example.kata.szakdoga.data.Videos
@@ -33,6 +37,7 @@ import kotlinx.android.synthetic.main.activity_icon_tabs.view.*
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
+import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
@@ -42,7 +47,7 @@ class IconTabsActivity : AppCompatActivity(), EasyPermissions.PermissionCallback
 
     companion object {
         var REQUEST_TAKE_GALLERY_VIDEO = 1
-
+        val TUTORIAL="tutorial"
         const val RC_CAMERA_PERM = 123
         const val RC_STORAGE_PERM = 124
     }
@@ -66,6 +71,7 @@ class IconTabsActivity : AppCompatActivity(), EasyPermissions.PermissionCallback
         setSupportActionBar(toolbar)
         toolbar.add_button.setOnClickListener {
             storageTask()
+
         }
 
 
@@ -76,6 +82,66 @@ class IconTabsActivity : AppCompatActivity(), EasyPermissions.PermissionCallback
         tabs.setupWithViewPager(viewpager)
 
         setupTabIcons()
+    }
+
+
+    override fun onStart() {
+        super.onStart()
+
+        val preferences = PreferenceManager.getDefaultSharedPreferences(this)
+        val tutorial = preferences.getBoolean(TUTORIAL, true)
+        if (tutorial) {
+            tutorial()
+            preferences.edit().putBoolean(TUTORIAL,false).apply()
+        }
+    }
+
+    private fun tutorial() {
+        demo(R.string.add_title, R.string.add_description, R.id.add_button)
+                .setPromptStateChangeListener { _, state ->
+                    if (state == MaterialTapTargetPrompt.STATE_DISMISSING) {
+                        demo(R.string.stream_title, R.string.stream_description, R.id.action_record)
+                                .setPromptStateChangeListener { _, state ->
+                                    if (state == MaterialTapTargetPrompt.STATE_DISMISSING) {
+                                        demo(R.string.home_title, R.string.home_description, (tabs.getChildAt(0) as ViewGroup).getChildAt(0))
+                                                .setPromptStateChangeListener { _, state ->
+                                                    if (state == MaterialTapTargetPrompt.STATE_DISMISSING) {
+                                                        demo(R.string.follow_title, R.string.follow_description, (tabs.getChildAt(0) as ViewGroup).getChildAt(1))
+                                                                .setPromptStateChangeListener { _, state ->
+                                                                    if (state == MaterialTapTargetPrompt.STATE_DISMISSING) {
+                                                                        demo(R.string.own_title, R.string.own_description, (tabs.getChildAt(0) as ViewGroup).getChildAt(2)).show()
+                                                                    }
+                                                                }
+                                                                .show()
+                                                    }
+                                                }
+                                                .show()
+                                    }
+                                }
+                                .show()
+                    }
+                }
+                .show()
+    }
+
+
+    fun demo(title: Int, desc: Int, target: View): MaterialTapTargetPrompt.Builder {
+        return MaterialTapTargetPrompt.Builder(this@IconTabsActivity, R.style.MaterialTapTargetPromptTheme_FabTarget)
+                .setPrimaryText(title)
+                .setSecondaryText(desc)
+                .setAnimationInterpolator(FastOutSlowInInterpolator())
+                .setMaxTextWidth(R.dimen.tap_target_menu_max_width)
+                .setTarget(target)
+    }
+
+    fun demo(title: Int, desc: Int, target: Int): MaterialTapTargetPrompt.Builder {
+        return MaterialTapTargetPrompt.Builder(this@IconTabsActivity, R.style.MaterialTapTargetPromptTheme_FabTarget)
+                .setPrimaryText(title)
+                .setSecondaryText(desc)
+                .setAnimationInterpolator(FastOutSlowInInterpolator())
+                .setMaxTextWidth(R.dimen.tap_target_menu_max_width)
+                .setTarget(target)
+
     }
 
     private fun setupTabIcons() {

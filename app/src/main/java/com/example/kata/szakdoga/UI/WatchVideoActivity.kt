@@ -145,6 +145,8 @@ class WatchVideoActivity : Activity(), NBMWebRTCPeer.Observer, RoomListener {
 
         val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
         audioManager.mode = AudioManager.MODE_NORMAL
+        audioManager.isSpeakerphoneOn = true
+
     }
 
     override fun onStop() {
