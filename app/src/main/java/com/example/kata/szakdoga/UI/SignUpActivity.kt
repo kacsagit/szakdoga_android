@@ -12,21 +12,22 @@ import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_sign_up.*
 
 
-
-
 class SignUpActivity : AppCompatActivity() {
 
     companion object {
-        var TAG="SignUpActivity"
+        var TAG = "SignUpActivity"
     }
+
     lateinit var mAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
         mAuth = FirebaseAuth.getInstance()
-        ok_b.setOnClickListener{
-            createUserWithEmailAndPassword(email_et.text.toString(),password_et.text.toString())
+        ok_b.setOnClickListener {
+            if (!email_et.text.isEmpty() && !password_et.text.isEmpty() && password_et.text == password_2et) {
+                createUserWithEmailAndPassword(email_et.text.toString(), password_et.text.toString())
+            }
         }
     }
 
@@ -42,7 +43,7 @@ class SignUpActivity : AppCompatActivity() {
                                     if (task1.isSuccessful) {
                                         Log.d(TAG, "Conformation email sent.")
                                         val ref = FirebaseDatabase.getInstance().getReference("users")
-                                         ref.child(user.uid).setValue(User(user.uid,user.email))
+                                        ref.child(user.uid).setValue(User(user.uid, user.email))
                                     }
                                 }
                         updateUI(user)
@@ -61,7 +62,7 @@ class SignUpActivity : AppCompatActivity() {
     private fun updateUI(currentUser: FirebaseUser?) {
         if (currentUser != null) {
             Toast.makeText(this, "Sign up successful, confirm e-mail address", Toast.LENGTH_LONG).show()
-        }else{
+        } else {
             Toast.makeText(this, "not successfull", Toast.LENGTH_LONG).show()
         }
 

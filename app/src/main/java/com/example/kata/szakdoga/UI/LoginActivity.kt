@@ -2,7 +2,6 @@ package com.example.kata.szakdoga.UI
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.widget.Toast
@@ -10,14 +9,6 @@ import com.example.kata.szakdoga.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_login.*
-import pub.devrel.easypermissions.AppSettingsDialog
-import pub.devrel.easypermissions.EasyPermissions
-
-
-
-
-
-
 
 
 class LoginActivity : AppCompatActivity() {
@@ -34,7 +25,9 @@ class LoginActivity : AppCompatActivity() {
         mAuth = FirebaseAuth.getInstance()
 
         ok_b.setOnClickListener {
-            signInWithEmailAndPassword(email_et.text.toString(), password_et.text.toString())
+            if (!email_et.text.isEmpty() && !password_et.text.isEmpty()) {
+                signInWithEmailAndPassword(email_et.text.toString(), password_et.text.toString())
+            }
         }
         sign_up_b.setOnClickListener {
             val intent = Intent(this, SignUpActivity::class.java)
@@ -52,22 +45,21 @@ class LoginActivity : AppCompatActivity() {
     private fun updateUI(currentUser: FirebaseUser?) {
         val user = mAuth.currentUser
         var emailVerified = false
-        user?.let{
+        user?.let {
             emailVerified = it.isEmailVerified
         }
         //todo email verifacian delete
         emailVerified = true
         if (currentUser != null && emailVerified) {
-       //     Toast.makeText(this, "logd in", Toast.LENGTH_LONG).show()
+            //     Toast.makeText(this, "logd in", Toast.LENGTH_LONG).show()
             val intent = Intent(this, IconTabsActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             startActivity(intent)
         } else {
-         //   Toast.makeText(this, "not successfull", Toast.LENGTH_LONG).show()
+            //   Toast.makeText(this, "not successfull", Toast.LENGTH_LONG).show()
         }
 
     }
-
 
 
     private fun signInWithEmailAndPassword(email: String, password: String) {
