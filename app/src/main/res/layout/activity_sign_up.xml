@@ -7,66 +7,79 @@
     android:layout_gravity="center"
     android:background="@color/colorPrimary"
     android:orientation="vertical"
-    android:padding="30dp"
+
     tools:context="com.example.kata.szakdoga.UI.SignUpActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="50dp"
-        android:layout_marginTop="50dp"
-        android:text="@string/sign_up_upper"
-        android:textColor="@color/white"
-        android:textSize="30sp" />
-
-    <android.support.design.widget.TextInputLayout
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="2dp">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <EditText
-            android:id="@+id/email_et"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:background="@color/white"
-            android:hint="@string/email"
-            android:inputType="textEmailAddress" />
-    </android.support.design.widget.TextInputLayout>
+            android:padding="30dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="2dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="50dp"
+            android:layout_marginTop="50dp"
+            android:text="@string/sign_up_upper"
+            android:textColor="@color/white"
+            android:textSize="30sp" />
 
-        <EditText
-            android:id="@+id/password_et"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:background="@color/white"
-            android:hint="@string/password"
-            android:inputType="textPassword" />
-    </android.support.design.widget.TextInputLayout>
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp">
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="2dp">
+            <EditText
+                android:id="@+id/email_et"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:background="@color/white"
+                android:hint="@string/email"
+                android:inputType="textEmailAddress" />
+        </android.support.design.widget.TextInputLayout>
 
-        <EditText
-            android:id="@+id/password_2et"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:background="@color/white"
-            android:hint="@string/password_again"
-            android:inputType="textPassword" />
-    </android.support.design.widget.TextInputLayout>
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp">
 
-    <Button
-        android:id="@+id/ok_b"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:padding="6dp"
-        android:text="@string/sign_up" />
+            <EditText
+                android:id="@+id/password_et"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:background="@color/white"
+                android:hint="@string/password"
+                android:inputType="textPassword" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp">
+
+            <EditText
+                android:id="@+id/password_2et"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:background="@color/white"
+                android:hint="@string/password_again"
+                android:inputType="textPassword" />
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:id="@+id/ok_b"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:padding="6dp"
+            android:text="@string/sign_up" />
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>
