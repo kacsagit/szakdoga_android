@@ -45,5 +45,22 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="live_stream_ended">Live stream ended</string>
+    <string name="close">Close</string>
+    <string name="login">Login</string>
+    <string name="don_t_have_an_account">Don\'t have an account?</string>
+    <string name="sign_up_upper">SIGN UP</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="password_again">Password again</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="connecting">Connecting</string>
+    <string name="end">End</string>
+    <string name="logout">Logout</string>
+    <string name="follow">Follow</string>
+    <string name="unfollow">Unfollow</string>
+    <string name="play">Play</string>
+    <string name="audio_video_permisson">You need to grant camera and audio permission to use it</string>
+    <string name="storage_permisson">You need to grant permisson to storage to upload videos.</string>
 
 </resources>

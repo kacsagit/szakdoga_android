@@ -87,8 +87,7 @@ class StreamVideoActivity : Activity(), NBMWebRTCPeer.Observer, RoomListener {
 
 
         hangup_button.setOnClickListener {
-            kurentoRoomAPI.sendLeaveRoom(roomId)
-            kurentoRoomAPI.disconnectWebSocket()
+            unpublish()
             finish()
         }
 
@@ -97,6 +96,13 @@ class StreamVideoActivity : Activity(), NBMWebRTCPeer.Observer, RoomListener {
             mirror=!mirror
             gl_surface_local.setMirror(mirror)
         }
+    }
+
+    fun unpublish(){
+        kurentoRoomAPI.sendUnpublishVideo(publishVideoRequestId);
+        kurentoRoomAPI.sendLeaveRoom(roomId)
+        kurentoRoomAPI.disconnectWebSocket()
+
     }
 
     override fun onStart() {
@@ -172,7 +178,8 @@ class StreamVideoActivity : Activity(), NBMWebRTCPeer.Observer, RoomListener {
         } else {
             if (this.backPressedThread != null)
                 this.backPressedThread!!.interrupt()
-            kurentoRoomAPI.sendUnpublishVideo(publishVideoRequestId)
+            unpublish()
+
             super.onBackPressed()
         }// If button pressed the second time then call super back pressed
         // (eventually calls onDestroy)

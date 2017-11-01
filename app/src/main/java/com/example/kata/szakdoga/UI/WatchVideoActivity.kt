@@ -25,6 +25,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AlertDialog
 import android.util.Log
+import android.view.View.VISIBLE
 import android.view.WindowManager
 import com.example.kata.nubomedia.kurentoroomclientandroid.*
 import com.example.kata.nubomedia.webrtcpeerandroid.NBMMediaConfiguration
@@ -150,8 +151,6 @@ class WatchVideoActivity : Activity(), NBMWebRTCPeer.Observer, RoomListener {
         endCall()
         super.onStop()
     }
-
-
 
 
     private fun generateOfferForRemote(remote_name: String) {
@@ -321,8 +320,10 @@ class WatchVideoActivity : Activity(), NBMWebRTCPeer.Observer, RoomListener {
             val user = map["id"].toString()
             userPublishList.put(user, true)
             mHandler.postDelayed(offerWhenReady, 2000)
-        }// Somebody in the room published their video
-
+        }// Somebody in the room unpublished their video
+        else if (notification.method == RoomListener.METHOD_PARTICIPANT_UNPUBLISHED) {
+            runOnUiThread{call_ended.visibility=VISIBLE}
+        }
         // Somebody wrote a message to other users in the room
         /*if (notification.method == RoomListener.METHOD_SEND_MESSAGE) {
             val user = map["user"].toString()

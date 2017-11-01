@@ -25,7 +25,6 @@
             android:scaleType="centerCrop" />
         <TextView
             android:id="@+id/user_text"
-            android:text="user"
             android:layout_margin="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -34,15 +33,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="right|center"
-            android:gravity="right">
+            android:layout_gravity="end|center"
+            android:gravity="end">
             <Button
                 android:id="@+id/unfollow_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Unfollow"
+                android:text="@string/unfollow"
                 android:visibility="gone"
-                android:layout_gravity="center|right"
+                android:layout_gravity="center|end"
                 android:gravity="center"
                 android:background="@color/white"
                 />
@@ -50,8 +49,8 @@
                 android:id="@+id/follow_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Follow"
-                android:layout_gravity="center|right"
+                android:text="@string/follow"
+                android:layout_gravity="center|end"
                 android:gravity="center"
                 />
 

@@ -1,5 +1,6 @@
 package com.example.kata.szakdoga.UI
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
@@ -29,13 +30,21 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.activity_icon_tabs.*
 import kotlinx.android.synthetic.main.activity_icon_tabs.view.*
+import pub.devrel.easypermissions.AfterPermissionGranted
+import pub.devrel.easypermissions.AppSettingsDialog
+import pub.devrel.easypermissions.EasyPermissions
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
 
-class IconTabsActivity : AppCompatActivity() {
+class IconTabsActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
+
+
     companion object {
         var REQUEST_TAKE_GALLERY_VIDEO = 1
+
+        const val RC_CAMERA_PERM = 123
+        const val RC_STORAGE_PERM = 124
     }
 
     lateinit var mStorageRef: StorageReference
@@ -56,10 +65,7 @@ class IconTabsActivity : AppCompatActivity() {
 
         setSupportActionBar(toolbar)
         toolbar.add_button.setOnClickListener {
-            val intent = Intent()
-            intent.type = "video/*"
-            intent.action = Intent.ACTION_GET_CONTENT
-            startActivityForResult(Intent.createChooser(intent, "Select Video"), REQUEST_TAKE_GALLERY_VIDEO)
+            storageTask()
         }
 
 
@@ -98,10 +104,12 @@ class IconTabsActivity : AppCompatActivity() {
         val id = item!!.itemId
         when (id) {
             R.id.action_record -> {
-                val intent = Intent(this, StreamVideoActivity::class.java)
-                intent.putExtra(Constants.ROOM_NAME, user?.uid)
-                intent.putExtra(Constants.USER_NAME, user?.email)
-                startActivity(intent)
+//                val intent = Intent(this, StreamVideoActivity::class.java)
+//                intent.putExtra(Constants.ROOM_NAME, UUID.randomUUID().toString())
+//                intent.putExtra(Constants.USER_NAME, user?.email)
+//                startActivity(intent)
+
+                cameraTask()
                 return true
             }
         }
@@ -144,7 +152,7 @@ class IconTabsActivity : AppCompatActivity() {
                     val selectedImagePath = getPath(selectedImageUri)
                     if (selectedImagePath != null) {
                         uploadFile(selectedImagePath)
-                        loading_flayout.visibility=VISIBLE
+                        loading_flayout.visibility = VISIBLE
 
                     }
                 }
@@ -170,7 +178,7 @@ class IconTabsActivity : AppCompatActivity() {
                     riversRef.putFile(file)
                             .addOnSuccessListener({ taskSnapshot ->
                                 // Get a URL to the uploaded content
-                                loading_flayout.visibility=GONE
+                                loading_flayout.visibility = GONE
                                 val downloadUrl = taskSnapshot.downloadUrl
                                 val imagedUrl = imageSnapshot.downloadUrl
                                 val video = Videos(downloadUrl.toString(), imagedUrl.toString(), user!!.uid, true)
@@ -179,7 +187,7 @@ class IconTabsActivity : AppCompatActivity() {
                                 Log.d(VideoListFragment.TAG, downloadUrl.toString())
                             })
                             .addOnFailureListener({ e ->
-                                loading_flayout.visibility=GONE
+                                loading_flayout.visibility = GONE
                                 Log.d(VideoListFragment.TAG, "failed")
                                 e.printStackTrace()
                                 // Handle unsuccessful uploads
@@ -227,4 +235,71 @@ class IconTabsActivity : AppCompatActivity() {
         } else
             null
     }
+
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
+    }
+
+
+    override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>?) {
+
+    }
+
+    override fun onPermissionsDenied(requestCode: Int, perms: List<String>) {
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+            AppSettingsDialog.Builder(this).build().show()
+        }
+    }
+
+
+    @AfterPermissionGranted(RC_CAMERA_PERM)
+    fun cameraTask() {
+        var perms = arrayOf(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO)
+        if (EasyPermissions.hasPermissions(this, *perms)) {
+            // Have permission, do the thing!
+            openStreamingActivity()
+        } else {
+            // Ask for one permission
+            EasyPermissions.requestPermissions(
+                    this,
+                    getString(R.string.audio_video_permisson),
+                    RC_CAMERA_PERM,
+                    *perms)
+        }
+    }
+
+
+    @AfterPermissionGranted(RC_STORAGE_PERM)
+    fun storageTask() {
+        var perms = Manifest.permission.READ_EXTERNAL_STORAGE
+        if (EasyPermissions.hasPermissions(this, perms)) {
+            // Have permission, do the thing!
+            openStorageChoser()
+        } else {
+            // Ask for one permission
+            EasyPermissions.requestPermissions(
+                    this,
+                    getString(R.string.storage_permisson),
+                    RC_STORAGE_PERM,
+                    perms)
+        }
+    }
+
+    fun openStreamingActivity() {
+        val intent = Intent(this, StreamVideoActivity::class.java)
+        intent.putExtra(Constants.ROOM_NAME, UUID.randomUUID().toString())
+        intent.putExtra(Constants.USER_NAME, user?.email)
+        startActivity(intent)
+    }
+
+    fun openStorageChoser() {
+        val intent = Intent()
+        intent.type = "video/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+        startActivityForResult(Intent.createChooser(intent, "Select Video"), REQUEST_TAKE_GALLERY_VIDEO)
+    }
+
+
 }
