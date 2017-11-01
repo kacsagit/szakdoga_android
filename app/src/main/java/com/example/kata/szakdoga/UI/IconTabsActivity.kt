@@ -98,10 +98,9 @@ class IconTabsActivity : AppCompatActivity() {
         val id = item!!.itemId
         when (id) {
             R.id.action_record -> {
-                //TODO: userid and roomname
                 val intent = Intent(this, StreamVideoActivity::class.java)
-                intent.putExtra(Constants.ROOM_NAME, "id")
-                intent.putExtra(Constants.USER_NAME, "usergfrfgd")
+                intent.putExtra(Constants.ROOM_NAME, user?.uid)
+                intent.putExtra(Constants.USER_NAME, user?.email)
                 startActivity(intent)
                 return true
             }

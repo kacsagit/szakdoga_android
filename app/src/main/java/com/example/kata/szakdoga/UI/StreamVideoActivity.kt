@@ -50,6 +50,9 @@ class StreamVideoActivity : Activity(), NBMWebRTCPeer.Observer, RoomListener {
     private var roomname: String = ""
     private lateinit var kurentoRoomAPI: KurentoRoomAPI
 
+
+    var mirror=true
+
     private enum class CallState {
         IDLE, PUBLISHING, PUBLISHED, WAITING_REMOTE_USER, RECEIVING_REMOTE_USER
     }
@@ -91,6 +94,8 @@ class StreamVideoActivity : Activity(), NBMWebRTCPeer.Observer, RoomListener {
 
         switch_button.setOnClickListener {
             nbmWebRTCPeer.switchCameraPosition()
+            mirror=!mirror
+            gl_surface_local.setMirror(mirror)
         }
     }
 
@@ -117,6 +122,7 @@ class StreamVideoActivity : Activity(), NBMWebRTCPeer.Observer, RoomListener {
         videoRequestUserMapping = HashMap()
 
         nbmWebRTCPeer = NBMWebRTCPeer(peerConnectionParameters, this, gl_surface_local, this)
+        gl_surface_local.setMirror(mirror)
         Log.i(TAG, "Initializing nbmWebRTCPeer...")
         nbmWebRTCPeer.initialize()
         callState = CallState.PUBLISHING
