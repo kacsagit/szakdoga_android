@@ -9,7 +9,7 @@
     android:background="@color/colorPrimary"
     android:orientation="vertical"
 
-    tools:context="com.example.kata.szakdoga.UI.LoginActivity">
+    tools:context="com.example.kata.szakdoga.UI.LoginActivity.LoginActivity">
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"

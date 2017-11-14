@@ -8,7 +8,7 @@
     android:background="@color/colorPrimary"
     android:orientation="vertical"
 
-    tools:context="com.example.kata.szakdoga.UI.SignUpActivity">
+    tools:context="com.example.kata.szakdoga.UI.SignUpActivity.SignUpActivity">
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"

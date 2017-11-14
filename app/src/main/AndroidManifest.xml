@@ -36,18 +36,18 @@
 
 
         <activity
-            android:name=".UI.IconTabsActivity"
+            android:name=".UI.IconTabsActivity.IconTabsActivity"
              >
         </activity>
         <activity
             android:name=".UI.StreamVideoActivity"
             android:screenOrientation="portrait"
-            android:parentActivityName=".UI.IconTabsActivity"
+            android:parentActivityName=".UI.IconTabsActivity.IconTabsActivity"
             android:windowSoftInputMode="stateHidden"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".UI.IconTabsActivity" />
+                android:value=".UI.IconTabsActivity.IconTabsActivity" />
         </activity>
 
         <activity android:name=".videoplayer.PlayerActivity"
@@ -72,21 +72,21 @@
         <activity
             android:name=".UI.WatchVideoActivity"
             android:screenOrientation="portrait"
-            android:parentActivityName=".UI.IconTabsActivity"
+            android:parentActivityName=".UI.IconTabsActivity.IconTabsActivity"
             android:windowSoftInputMode="stateHidden"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".UI.IconTabsActivity" />
+                android:value=".UI.IconTabsActivity.IconTabsActivity" />
         </activity>
-        <activity android:name=".UI.LoginActivity">
+        <activity android:name=".UI.LoginActivity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".UI.SignUpActivity" />
+        <activity android:name=".UI.SignUpActivity.SignUpActivity" />
         <service
             android:name=".service.MyFirebaseInstanceIDService">
             <intent-filter>

@@ -1,58 +1,51 @@
-package com.example.kata.szakdoga.UI
+package com.example.kata.szakdoga.UI.IconTabsActivity
 
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
-import android.media.ThumbnailUtils
-import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.preference.PreferenceManager
-import android.provider.MediaStore
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.ViewPager
 import android.support.v4.view.animation.FastOutSlowInInterpolator
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import com.example.kata.szakdoga.Constants
 import com.example.kata.szakdoga.R
-import com.example.kata.szakdoga.data.Videos
+import com.example.kata.szakdoga.UI.LoginActivity.TabsPresenter
+import com.example.kata.szakdoga.UI.LoginActivity.TabsScreen
+import com.example.kata.szakdoga.UI.OwnListFragment.OwnListFragment
+import com.example.kata.szakdoga.UI.StreamVideoActivity
+import com.example.kata.szakdoga.UI.UsersListFragment.UsersListFragment
+import com.example.kata.szakdoga.UI.VideoListFragment.VideoListFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.activity_icon_tabs.*
 import kotlinx.android.synthetic.main.activity_icon_tabs.view.*
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
-import java.io.File
-import java.io.FileOutputStream
 import java.util.*
 
-class IconTabsActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
+class IconTabsActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, TabsScreen {
+
 
 
     companion object {
         var REQUEST_TAKE_GALLERY_VIDEO = 1
-        val TUTORIAL="tutorial"
+        val TUTORIAL = "tutorial"
         const val RC_CAMERA_PERM = 123
         const val RC_STORAGE_PERM = 124
     }
 
-    lateinit var mStorageRef: StorageReference
 
     lateinit var mAuth: FirebaseAuth
     val link = ""
@@ -62,11 +55,10 @@ class IconTabsActivity : AppCompatActivity(), EasyPermissions.PermissionCallback
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_icon_tabs)
-        mStorageRef = FirebaseStorage.getInstance().reference
         mAuth = FirebaseAuth.getInstance()
         user = mAuth.currentUser
-        val database = FirebaseDatabase.getInstance()
-        myRef = database.getReference("videos")
+
+
 
         setSupportActionBar(toolbar)
         toolbar.add_button.setOnClickListener {
@@ -87,12 +79,12 @@ class IconTabsActivity : AppCompatActivity(), EasyPermissions.PermissionCallback
 
     override fun onStart() {
         super.onStart()
-
+        TabsPresenter.instance.attachScreen(this)
         val preferences = PreferenceManager.getDefaultSharedPreferences(this)
         val tutorial = preferences.getBoolean(TUTORIAL, true)
         if (tutorial) {
             tutorial()
-            preferences.edit().putBoolean(TUTORIAL,false).apply()
+            preferences.edit().putBoolean(TUTORIAL, false).apply()
         }
     }
 
@@ -170,11 +162,6 @@ class IconTabsActivity : AppCompatActivity(), EasyPermissions.PermissionCallback
         val id = item!!.itemId
         when (id) {
             R.id.action_record -> {
-//                val intent = Intent(this, StreamVideoActivity::class.java)
-//                intent.putExtra(Constants.ROOM_NAME, UUID.randomUUID().toString())
-//                intent.putExtra(Constants.USER_NAME, user?.email)
-//                startActivity(intent)
-
                 cameraTask()
                 return true
             }
@@ -215,9 +202,9 @@ class IconTabsActivity : AppCompatActivity(), EasyPermissions.PermissionCallback
                 data?.let {
                     val selectedImageUri = data.data
                     // MEDIA GALLERY
-                    val selectedImagePath = getPath(selectedImageUri)
+                    val selectedImagePath = TabsPresenter.instance.getPath(selectedImageUri, contentResolver)
                     if (selectedImagePath != null) {
-                        uploadFile(selectedImagePath)
+                        TabsPresenter.instance.uploadFile(selectedImagePath)
                         loading_flayout.visibility = VISIBLE
 
                     }
@@ -225,81 +212,6 @@ class IconTabsActivity : AppCompatActivity(), EasyPermissions.PermissionCallback
 
             }
         }
-    }
-
-
-    private fun uploadFile(selectedImagePath: String) {
-        val file = Uri.fromFile(File(selectedImagePath))
-
-        val name = UUID.randomUUID().toString()
-
-        val imageRef = mStorageRef.child("images/" + user!!.uid + "/" + name + "image")
-        val riversRef = mStorageRef.child("images/" + user!!.uid + "/" + name)
-
-        val bMap = ThumbnailUtils.createVideoThumbnail(file.path, MediaStore.Video.Thumbnails.MINI_KIND)
-
-        imageRef.putFile(saveImage(bMap, name))
-                .addOnSuccessListener({ imageSnapshot ->
-                    // Get a URL to the uploaded content
-                    riversRef.putFile(file)
-                            .addOnSuccessListener({ taskSnapshot ->
-                                // Get a URL to the uploaded content
-                                loading_flayout.visibility = GONE
-                                val downloadUrl = taskSnapshot.downloadUrl
-                                val imagedUrl = imageSnapshot.downloadUrl
-                                val video = Videos(downloadUrl.toString(), imagedUrl.toString(), user!!.uid, true)
-                                val newRef = myRef.push()
-                                newRef.setValue(video)
-                                Log.d(VideoListFragment.TAG, downloadUrl.toString())
-                            })
-                            .addOnFailureListener({ e ->
-                                loading_flayout.visibility = GONE
-                                Log.d(VideoListFragment.TAG, "failed")
-                                e.printStackTrace()
-                                // Handle unsuccessful uploads
-                                // ...
-
-                            })
-                })
-                .addOnFailureListener({ e ->
-                    Log.d(VideoListFragment.TAG, "failed")
-                    e.printStackTrace()
-                    // Handle unsuccessful uploads
-                    // ...
-
-                })
-
-    }
-
-    private fun saveImage(finalBitmap: Bitmap, filename: String): Uri {
-
-        val root = Environment.getExternalStorageDirectory().absolutePath
-        val myDir = File(root + "/saved_images")
-        myDir.mkdirs()
-
-        val file = File(myDir, filename)
-        if (file.exists()) file.delete()
-
-        FileOutputStream(file).use {
-            finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, it)
-            it.flush()
-        }
-        return Uri.fromFile(file)
-    }
-
-
-    private fun getPath(uri: Uri): String? {
-        val projection = arrayOf(MediaStore.Video.Media.DATA)
-        val cursor = contentResolver.query(uri, projection, null, null, null)
-        return if (cursor != null) {
-            val column_index = cursor
-                    .getColumnIndexOrThrow(MediaStore.Video.Media.DATA)
-            cursor.moveToFirst()
-            val value = cursor.getString(column_index)
-            cursor.close()
-            value
-        } else
-            null
     }
 
 
@@ -365,6 +277,16 @@ class IconTabsActivity : AppCompatActivity(), EasyPermissions.PermissionCallback
         intent.type = "video/*"
         intent.action = Intent.ACTION_GET_CONTENT
         startActivityForResult(Intent.createChooser(intent, "Select Video"), REQUEST_TAKE_GALLERY_VIDEO)
+    }
+
+
+    override fun onStop() {
+        super.onStop()
+        TabsPresenter.instance.detachScreen()
+    }
+
+    override fun loadingFlayout(gone: Int) {
+        loading_flayout.visibility = gone
     }
 
 
