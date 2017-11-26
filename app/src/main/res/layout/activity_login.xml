@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:background="@color/colorPrimary"
+    android:focusableInTouchMode="true"
     android:orientation="vertical"
 
     tools:context="com.example.kata.szakdoga.UI.LoginActivity.LoginActivity">

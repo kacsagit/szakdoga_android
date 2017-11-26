@@ -27,14 +27,13 @@ class OwnVideoListAdapter(dataset: ArrayList<Videos>) : RecyclerView.Adapter<Own
     private lateinit var mContext: Context
 
 
-
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        Picasso.with(mContext).load(mDataSet[position].tumbnail).placeholder(R.drawable.default_img).into(holder?.image, object: Callback {
+        Picasso.with(mContext).load(mDataSet[position].thumbnail).placeholder(R.drawable.default_img).into(holder?.image, object : Callback {
             override fun onError() {}
 
             override fun onSuccess() {
-                holder?.progressBar?.visibility= View.GONE
-                holder?.playImage?.visibility= View.VISIBLE
+                holder?.progressBar?.visibility = View.GONE
+                holder?.playImage?.visibility = View.VISIBLE
             }
 
 
@@ -49,7 +48,7 @@ class OwnVideoListAdapter(dataset: ArrayList<Videos>) : RecyclerView.Adapter<Own
                     holder.image,
                     ViewCompat.getTransitionName(holder.image))
             var sample = UriSample(preferExtensionDecoders, uri, extension, adTagUri)
-            mContext.startActivity(sample.buildIntent(mContext),options.toBundle())
+            mContext.startActivity(sample.buildIntent(mContext), options.toBundle())
 
 
 //            val intent = Intent(mContext, VideoActivity::class.java)
@@ -75,19 +74,19 @@ class OwnVideoListAdapter(dataset: ArrayList<Videos>) : RecyclerView.Adapter<Own
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.own_video_view, parent, false)
-        mContext=parent.context
+        mContext = parent.context
         return ViewHolder(v)
     }
 
     class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
         var image: ImageView = v.findViewById(R.id.image)
         var playImage: ImageView = v.findViewById(R.id.play_image)
-        var progressBar: ProgressBar =v.findViewById(R.id.progress_bar)
+        var progressBar: ProgressBar = v.findViewById(R.id.progress_bar)
 
     }
 
     private class UriSample(val preferExtensionDecoders: Boolean?, val uri: String?,
-                            val extension: String?, val adTagUri: String?)  {
+                            val extension: String?, val adTagUri: String?) {
 
         fun buildIntent(context: Context): Intent {
             val intent = Intent(context, PlayerActivity::class.java)
@@ -101,8 +100,6 @@ class OwnVideoListAdapter(dataset: ArrayList<Videos>) : RecyclerView.Adapter<Own
         }
 
     }
-
-
 
 
 }

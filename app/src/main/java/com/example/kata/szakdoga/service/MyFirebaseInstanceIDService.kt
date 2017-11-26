@@ -10,7 +10,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 /**
  * Created by Kata on 2017. 10. 17..
  */
-class MyFirebaseInstanceIDService: FirebaseInstanceIdService() {
+class MyFirebaseInstanceIDService : FirebaseInstanceIdService() {
 
     override fun onTokenRefresh() {
         FirebaseMessaging.getInstance().subscribeToTopic("news");
@@ -21,7 +21,7 @@ class MyFirebaseInstanceIDService: FirebaseInstanceIdService() {
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
         // Instance ID token to your app server.
-       // sendRegistrationToServer(refreshedToken)
+        // sendRegistrationToServer(refreshedToken)
     }
 
 

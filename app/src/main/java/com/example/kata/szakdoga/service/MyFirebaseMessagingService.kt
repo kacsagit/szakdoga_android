@@ -19,12 +19,9 @@ import com.google.firebase.messaging.RemoteMessage
 /**
  * Created by Kata on 2017. 10. 17..
  */
-class MyFirebaseMessagingService: FirebaseMessagingService() {
+class MyFirebaseMessagingService : FirebaseMessagingService() {
     val NOTIFICATION_CHANNEL_ID = "4565"
     override fun onMessageReceived(remoteMessage: RemoteMessage?) {
-        // ...
-
-        // TODO(developer): Handle FCM messages here.
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         Log.d(TAG, "From: " + remoteMessage!!.from)
 
@@ -49,14 +46,14 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
 
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
-        sendNotification(remoteMessage.data["title"], remoteMessage.data["body"],remoteMessage.data["room"]);
+        sendNotification(remoteMessage.data["title"], remoteMessage.data["body"], remoteMessage.data["room"]);
 
     }
 
-    private fun sendNotification(messageTitle: String?, messageBody: String?,room: String?) {
+    private fun sendNotification(messageTitle: String?, messageBody: String?, room: String?) {
         val intent = Intent(this, WatchVideoActivity::class.java)
-        intent.putExtra(Constants.ROOM_NAME,room)
-        intent.putExtra(Constants.USER_NAME,"defg")
+        intent.putExtra(Constants.ROOM_NAME, room)
+        intent.putExtra(Constants.USER_NAME, "defg")
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(this, 0 /* request code */, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
@@ -64,7 +61,7 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
 
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
 
-        val notificationBuilder = NotificationCompat.Builder(this,NOTIFICATION_CHANNEL_ID)
+        val notificationBuilder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle(messageTitle)
                 .setContentText(messageBody)

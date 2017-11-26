@@ -51,7 +51,7 @@ class StreamVideoActivity : Activity(), NBMWebRTCPeer.Observer, RoomListener {
     private lateinit var kurentoRoomAPI: KurentoRoomAPI
 
 
-    var mirror=true
+    var mirror = true
 
     private enum class CallState {
         IDLE, PUBLISHING, PUBLISHED, WAITING_REMOTE_USER, RECEIVING_REMOTE_USER
@@ -93,12 +93,12 @@ class StreamVideoActivity : Activity(), NBMWebRTCPeer.Observer, RoomListener {
 
         switch_button.setOnClickListener {
             nbmWebRTCPeer.switchCameraPosition()
-            mirror=!mirror
+            mirror = !mirror
             gl_surface_local.setMirror(mirror)
         }
     }
 
-    fun unpublish(){
+    fun unpublish() {
         kurentoRoomAPI.sendUnpublishVideo(publishVideoRequestId);
         kurentoRoomAPI.sendLeaveRoom(roomId)
         kurentoRoomAPI.disconnectWebSocket()
@@ -186,9 +186,6 @@ class StreamVideoActivity : Activity(), NBMWebRTCPeer.Observer, RoomListener {
     }
 
 
-
-
-
     /**
      * Terminates the current call and ends activity
      */
@@ -228,7 +225,7 @@ class StreamVideoActivity : Activity(), NBMWebRTCPeer.Observer, RoomListener {
     override fun onRemoteStreamAdded(mediaStream: MediaStream, nbmPeerConnection: NBMPeerConnection) {
         Log.i(TAG, "onRemoteStreamAdded")
         nbmWebRTCPeer.setActiveMasterStream(mediaStream)
-        runOnUiThread{call_status.text = ""}
+        runOnUiThread { call_status.text = "" }
     }
 
     override fun onRemoteStreamRemoved(mediaStream: MediaStream, nbmPeerConnection: NBMPeerConnection) {

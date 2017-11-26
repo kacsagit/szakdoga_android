@@ -3,9 +3,9 @@ package com.example.kata.szakdoga.data
 /**
  * Created by Kata on 2017. 09. 08..
  */
-class Videos (
+data class Videos(
         var link: String = "",
-        var tumbnail: String="",
+        var thumbnail: String = "",
         var user: String = "",
-        var public: Boolean=false
+        var public: Boolean = false
 )

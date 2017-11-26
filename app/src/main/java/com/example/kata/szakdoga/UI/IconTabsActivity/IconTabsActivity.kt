@@ -38,7 +38,6 @@ import java.util.*
 class IconTabsActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks, TabsScreen {
 
 
-
     companion object {
         var REQUEST_TAKE_GALLERY_VIDEO = 1
         val TUTORIAL = "tutorial"
@@ -58,14 +57,11 @@ class IconTabsActivity : AppCompatActivity(), EasyPermissions.PermissionCallback
         mAuth = FirebaseAuth.getInstance()
         user = mAuth.currentUser
 
-
-
         setSupportActionBar(toolbar)
         toolbar.add_button.setOnClickListener {
             storageTask()
 
         }
-
 
         supportActionBar?.setDisplayShowTitleEnabled(false)
 

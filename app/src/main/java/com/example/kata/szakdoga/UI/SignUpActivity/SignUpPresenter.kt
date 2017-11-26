@@ -12,15 +12,15 @@ import com.google.firebase.database.FirebaseDatabase
 
 class SignUpPresenter : Presenter<SignUpScreen>() {
 
-    var   mAuth = FirebaseAuth.getInstance()
+  var mAuth = FirebaseAuth.getInstance()
 
-    private object Holder {
-        val INSTANCE = SignUpPresenter()
-    }
+  private object Holder {
+    val INSTANCE = SignUpPresenter()
+  }
 
-    companion object {
-        val instance: SignUpPresenter by lazy { Holder.INSTANCE }
-    }
+  companion object {
+    val instance: SignUpPresenter by lazy { Holder.INSTANCE }
+  }
 
 
     fun createUserWithEmailAndPassword(email: String, password: String) {
@@ -45,7 +45,6 @@ class SignUpPresenter : Presenter<SignUpScreen>() {
 
                 }
     }
-
 
 
 }
