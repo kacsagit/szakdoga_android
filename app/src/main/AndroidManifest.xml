@@ -50,7 +50,7 @@
                 android:value=".UI.IconTabsActivity.IconTabsActivity" />
         </activity>
 
-        <activity android:name=".videoplayer.PlayerActivity"
+        <activity android:name=".UI.videoplayer.PlayerActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:launchMode="singleTop"
             android:label="Video"

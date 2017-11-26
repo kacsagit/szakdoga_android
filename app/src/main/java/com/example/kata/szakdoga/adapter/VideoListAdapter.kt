@@ -17,7 +17,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import com.example.kata.szakdoga.R
 import com.example.kata.szakdoga.data.Videos
-import com.example.kata.szakdoga.videoplayer.PlayerActivity
+import com.example.kata.szakdoga.UI.videoplayer.PlayerActivity
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import java.util.*
