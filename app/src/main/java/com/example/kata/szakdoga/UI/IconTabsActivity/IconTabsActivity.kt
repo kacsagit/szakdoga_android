@@ -195,10 +195,12 @@ class IconTabsActivity : AppCompatActivity(), EasyPermissions.PermissionCallback
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == REQUEST_TAKE_GALLERY_VIDEO) {
-                data?.let {
-                    val selectedImageUri = data.data
+                data?.data?.let {
+                    val selectedImageUri = it
                     // MEDIA GALLERY
-                    val selectedImagePath = TabsPresenter.instance.getPath(selectedImageUri, contentResolver)
+
+
+                    val selectedImagePath = TabsPresenter.instance.getPath(this,selectedImageUri)
                     if (selectedImagePath != null) {
                         TabsPresenter.instance.uploadFile(selectedImagePath)
                         loading_flayout.visibility = VISIBLE
